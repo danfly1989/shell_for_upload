@@ -35,6 +35,24 @@ void	ft_execute_pipeline(t_dat *d, char ***cmd)
 	ft_free_fd(fd);
 }
 
+/*Static to remind that this is a split from
+exec command*/
+static void	ft_execve_error(char *cmd)
+{
+	int	code;
+
+	if (errno == EACCES || errno == EISDIR)
+		code = 126;
+	else if (errno == ENOENT)
+		code = 127;
+	else
+		code = 1;
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(strerror(errno), 2);
+	exit(code);
+}
+
 void	ft_exec_command(t_dat *d, char **cmd)
 {
 	char	*cmd_path;
@@ -56,30 +74,7 @@ void	ft_exec_command(t_dat *d, char **cmd)
 	}
 	execve(cmd_path, cmd, d->evs);
 	free(cmd_path);
-	if (errno == EACCES || errno == EISDIR)
-	{
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
-		exit(126);
-	}
-	else if (errno == ENOENT)
-	{
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
-		exit(127);
-	}
-	else
-	{
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
-		exit(1);
-	}
-	free(cmd_path);
-	perror("execve");
-	exit(1);
+	ft_execve_error(cmd[0]);
 }
 
 void	ft_external_functions(t_dat *data, char *line)

@@ -71,8 +71,8 @@ void	*ft_free_error_expanded(char **expanded, int i)
 
 char	**ft_expand_tokens(t_dat *d, char **tokens, int *qtypes, int i)
 {
-	char	**expanded;
-	int		j;
+	char **expanded;
+	int j;
 
 	while (tokens[i])
 		i++;
