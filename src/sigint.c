@@ -12,6 +12,16 @@
 
 #include "minishell.h"
 
+void	ft_parent_sigint_handler(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	g_last_exit_status = 130;
+	rl_redisplay();
+}
+
 void	ft_child_sigint_handler(int sig)
 {
 	if (sig == SIGINT)

@@ -29,6 +29,12 @@ char	*ft_extract_special_token(char *str, t_dat *d)
 		token = malloc(3);
 		ft_strlcpy(token, &str[d->i], 3);
 	}
+	else if (str[d->i] == '<' && str[d->i + 1] == '<')
+	{
+		len = 2;
+		token = malloc(3);
+		ft_strlcpy(token, &str[d->i], 3);
+	}
 	else
 	{
 		len = 1;

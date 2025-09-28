@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+
+
 void	ft_set_main_signals(void)
 {
 	struct sigaction	sa_int;
