@@ -57,7 +57,7 @@ void	ft_exec_command(t_dat *d, char **cmd)
 {
 	char	*cmd_path;
 
-	if (!cmd || !cmd[0])
+	if (!cmd || !cmd[0] || !*cmd[0])
 		exit(127);
 	if (ft_is_pipe_builtin(cmd[0]))
 	{

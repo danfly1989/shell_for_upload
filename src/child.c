@@ -90,7 +90,9 @@ void	ft_wait_children(int tot)
 	int	status;
 	int	i;
 	int	signal_num;
+	int	last_exit_code;
 
+	last_exit_code = 0;
 	i = 0;
 	while (i < tot)
 	{
@@ -99,17 +101,13 @@ void	ft_wait_children(int tot)
 		{
 			signal_num = WTERMSIG(status);
 			if (signal_num == SIGQUIT)
-			{
-				(printf("quit: core dumped\n"), g_last_exit_status = 131);
-			}
+				(printf("quit: core dumped\n"), last_exit_code = 131);
 			else if (signal_num == SIGINT)
-			{
-				write(1, "\n", 1);
-				g_last_exit_status = 130;
-			}
+				(write(1, "\n", 1), last_exit_code = 130);
 		}
 		else if (WIFEXITED(status))
-			g_last_exit_status = WEXITSTATUS(status);
+			last_exit_code = WEXITSTATUS(status);
 		i++;
 	}
+	g_last_exit_status = last_exit_code;
 }

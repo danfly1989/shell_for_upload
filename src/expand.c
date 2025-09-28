@@ -69,32 +69,33 @@ void	*ft_free_error_expanded(char **expanded, int i)
 	return (NULL);
 }
 
-static char	**ft_fill_expanded(char **tokens, int *qtypes, char **expanded)
+static char	**ft_fill_expanded(t_dat d, char **tokens, int *qtypes,
+		char **expanded)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (tokens[i])
+	d.i = 0;
+	d.j = 0;
+	while (tokens[d.i])
 	{
-		if (qtypes[i] == 1)
-			expanded[j] = ft_strdup(tokens[i]);
+		if (qtypes[d.i] == 1)
+		{
+			expanded[d.j] = ft_strdup(tokens[d.i]);
+			if (!expanded[d.j])
+				return (ft_free_error_expanded(expanded, d.j));
+			d.j++;
+		}
 		else
 		{
-			if (expanded[j][0] == '\0' && qtypes[i] != 2)
+			if (expanded[d.j] && expanded[d.j][0] == '\0' && qtypes[d.i] != 2)
 			{
-				free(expanded[j]);
-				i++;
-				continue ;
+				free(expanded[d.j]);
+				expanded[d.j] = NULL;
 			}
+			else
+				d.j++;
 		}
-		if (!expanded[j])
-			return (ft_free_error_expanded(expanded, j));
-		i++;
-		j++;
+		d.i++;
 	}
-	expanded[j] = NULL;
+	expanded[d.j] = NULL;
 	return (expanded);
 }
 
@@ -119,5 +120,5 @@ char	**ft_expand_tokens(t_dat *d, char **tokens, int *qtypes, int i)
 		}
 		i++;
 	}
-	return (ft_fill_expanded(tokens, qtypes, expanded));
+	return (ft_fill_expanded(*d, tokens, qtypes, expanded));
 }

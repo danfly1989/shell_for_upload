@@ -12,44 +12,47 @@
 
 #include "minishell.h"
 
-void	ft_strip_within_str(char *str, size_t len)
+static void	ft_copy_unquoted_segment(char *str, size_t len, char *ret,
+		t_dat *data)
 {
-	size_t	i;
-	size_t	j;
+	char	quote;
 	size_t	start;
 	size_t	end;
-	char	ret[256];
-	char	quote;
 
-	i = 0;
-	j = 0;
-	while (i < len && str[i])
+	quote = str[data->i];
+	start = data->i + 1;
+	end = start;
+	while (end < len && str[end] != quote)
+		end++;
+	if (end < len && str[end] == quote)
 	{
-		if (str[i] == '"' || str[i] == '\'')
-		{
-			quote = str[i];
-			start = i + 1;
-			end = start;
-			while (end < len && str[end] != quote)
-				end++;
-			if (end < len && str[end] == quote)
-			{
-				while (start < end)
-					ret[j++] = str[start++];
-				i = end + 1;
-			}
-			else
-				ret[j++] = str[i++];
-		}
-		else
-			ret[j++] = str[i++];
+		while (start < end)
+			ret[data->j++] = str[start++];
+		data->i = end + 1;
 	}
-	ret[j] = '\0';
-	i = 0;
-	while (i <= j)
+	else
+		ret[data->j++] = str[data->i++];
+}
+
+void	ft_strip_within_str(t_dat data, char *str, size_t len)
+{
+	char	ret[256];
+
+	data.i = 0;
+	data.j = 0;
+	while (data.i < len && str[data.i])
 	{
-		str[i] = ret[i];
-		i++;
+		if (str[data.i] == '"' || str[data.i] == '\'')
+			ft_copy_unquoted_segment(str, len, ret, &data);
+		else
+			ret[data.j++] = str[data.i++];
+	}
+	ret[data.j] = '\0';
+	data.i = 0;
+	while (data.i <= data.j)
+	{
+		str[data.i] = ret[data.i];
+		data.i++;
 	}
 }
 
@@ -75,32 +78,6 @@ void	ft_strip_surrounding_quotes(char *s)
 	}
 }
 
-void	ft_strip_quotes_after_equal(char *s)
-{
-	char	*eq;
-	char	quote;
-	size_t	j;
-	size_t	len;
-
-	eq = ft_strchr(s, '=');
-	len = ft_strlen(s);
-	if (eq && ((eq[1] == '"' && s[len - 1] != '"') || (eq[1] == '\'' && s[len
-				- 1] != '\'')))
-		return ;
-	if (eq && ((eq[1] == '"' && s[len - 1] == '"') || (eq[1] == '\'' && s[len
-				- 1] == '\'')))
-	{
-		quote = eq[1];
-		j = 0;
-		while (eq[2 + j] && eq[2 + j] != quote)
-		{
-			eq[1 + j] = eq[2 + j];
-			j++;
-		}
-		eq[1 + j] = '\0';
-	}
-}
-
 void	ft_strip_quotes_from_xln(t_dat *d)
 {
 	size_t	i;
@@ -114,7 +91,7 @@ void	ft_strip_quotes_from_xln(t_dat *d)
 		{
 			ft_strip_surrounding_quotes(d->xln[i]);
 			ft_strip_quotes_after_equal(d->xln[i]);
-			ft_strip_within_str(d->xln[i], ft_strlen(d->xln[i]));
+			ft_strip_within_str(*d, d->xln[i], ft_strlen(d->xln[i]));
 		}
 		i++;
 	}

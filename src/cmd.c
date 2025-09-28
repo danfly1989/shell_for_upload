@@ -12,11 +12,13 @@
 
 #include "minishell.h"
 
+/* Always return the path for relative/absolute paths
+Let	execve(void) determine if it's valid. This function was
+formerly using access incorrectly before letting it jump
+to execve, resulting in incorrect error codes.*/
 char	*ft_get_cmd_path_nested(const char *cmd)
 {
-	if (access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
-	return (NULL);
+	return (ft_strdup(cmd));
 }
 
 char	*ft_get_cmd_path(t_dat *d, const char *cmd, int i)
