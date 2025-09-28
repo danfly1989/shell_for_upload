@@ -248,4 +248,5 @@ int								handle_outfile_trunc(char **tokens, int *i,
 int								handle_outfile_append(char **tokens, int *i,
 									int *last_out_fd);
 int								handle_heredoc_redirect(char *heredoc_delim);
+int								is_special_char(char c);
 #endif
