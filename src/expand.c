@@ -69,30 +69,19 @@ void	*ft_free_error_expanded(char **expanded, int i)
 	return (NULL);
 }
 
-char	**ft_expand_tokens(t_dat *d, char **tokens, int *qtypes, int i)
+static char	**ft_fill_expanded(char **tokens, int *qtypes, char **expanded)
 {
-	char **expanded;
-	int j;
+	int	i;
+	int	j;
 
-	while (tokens[i])
-		i++;
-	expanded = malloc(sizeof(char *) * (i + 1));
-	if (!expanded)
-		return (NULL);
 	i = 0;
 	j = 0;
 	while (tokens[i])
 	{
 		if (qtypes[i] == 1)
-		{
 			expanded[j] = ft_strdup(tokens[i]);
-		}
 		else
 		{
-			d->tmp2 = ft_expand_exit_status(d, tokens[i]);
-			expanded[j] = ft_expand_token(d->tmp2, d, qtypes[i], 0);
-			free(d->tmp2);
-			d->tmp2 = NULL;
 			if (expanded[j][0] == '\0' && qtypes[i] != 2)
 			{
 				free(expanded[j]);
@@ -107,4 +96,28 @@ char	**ft_expand_tokens(t_dat *d, char **tokens, int *qtypes, int i)
 	}
 	expanded[j] = NULL;
 	return (expanded);
+}
+
+char	**ft_expand_tokens(t_dat *d, char **tokens, int *qtypes, int i)
+{
+	char	**expanded;
+
+	while (tokens[i])
+		i++;
+	expanded = malloc(sizeof(char *) * (i + 1));
+	if (!expanded)
+		return (NULL);
+	i = 0;
+	while (tokens[i])
+	{
+		if (qtypes[i] != 1)
+		{
+			d->tmp2 = ft_expand_exit_status(d, tokens[i]);
+			expanded[i] = ft_expand_token(d->tmp2, d, qtypes[i], 0);
+			free(d->tmp2);
+			d->tmp2 = NULL;
+		}
+		i++;
+	}
+	return (ft_fill_expanded(tokens, qtypes, expanded));
 }
