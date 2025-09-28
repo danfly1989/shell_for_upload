@@ -96,6 +96,7 @@ void	ft_wait_children(int tot)
 	i = 0;
 	while (i < tot)
 	{
+		signal(SIGINT, SIG_IGN);
 		waitpid(-1, &status, 0);
 		if (WIFSIGNALED(status))
 		{
@@ -109,5 +110,6 @@ void	ft_wait_children(int tot)
 			last_exit_code = WEXITSTATUS(status);
 		i++;
 	}
+	ft_set_main_signals();
 	g_last_exit_status = last_exit_code;
 }
