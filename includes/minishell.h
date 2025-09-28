@@ -249,4 +249,6 @@ int								handle_outfile_append(char **tokens, int *i,
 									int *last_out_fd);
 int								handle_heredoc_redirect(char *heredoc_delim);
 int								is_special_char(char c);
+char							**ft_sub_tokenize_line(t_dat *d, char *str,
+									int **quote_types_out);
 #endif

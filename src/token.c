@@ -40,11 +40,6 @@ char	*ft_extract_special_token(char *str, t_dat *d)
 	return (token);
 }
 
-int	is_special_char(char c)
-{
-	return (c == '<' || c == '>' || c == '|' || c == ';' || c == '&');
-}
-
 int	ft_skip_token(char *str, int i)
 {
 	int		in_quotes;
@@ -67,14 +62,12 @@ int	ft_skip_token(char *str, int i)
 	}
 	return (i);
 }
+
 char	**ft_tokenize_line(t_dat *d, char *str, int **quote_types_out)
 {
 	char	**tokens;
 
-	ft_reset_iterators(d);
-	d->k = ft_count_tokens(str);
-	tokens = malloc(sizeof(char *) * (d->k + 1));
-	d->qtypes = malloc(sizeof(int) * (d->k + 1));
+	tokens = ft_sub_tokenize_line(d, str, quote_types_out);
 	if (!tokens || !d->qtypes)
 		return (ft_free_token_quote(tokens, d->qtypes));
 	while (str[d->i])
@@ -116,8 +109,8 @@ char	*ft_get_var_value(t_va *list, const char *name)
 
 char	*ft_strjoin_char(const char *s, char c)
 {
-	char *new;
-	size_t len;
+	char	*new;
+	size_t	len;
 
 	if (!s)
 		return (NULL);

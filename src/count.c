@@ -78,8 +78,8 @@ int	ft_count_pipes(char **tokens)
 
 int	ft_count_redirections(char **tokens)
 {
-	int count;
-	int i;
+	int	count;
+	int	i;
 
 	count = 0;
 	i = 0;
