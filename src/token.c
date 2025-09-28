@@ -98,19 +98,22 @@ char	**ft_tokenize_line(t_dat *d, char *str, int **quote_types_out)
 	return (tokens);
 }
 
-char	*ft_get_var_value(t_va *list, const char *name)
+char	**ft_sub_tokenize_line(t_dat *d, char *str, int **quote_types_out)
 {
-	size_t	n;
+	char	**tokens;
 
-	n = ft_strlen(name);
-	while (list)
-	{
-		if (list->name && ft_strlen(list->name) == n && ft_strncmp(list->name,
-				name, n) == 0)
-			return (list->value);
-		list = list->next;
-	}
-	return (NULL);
+	(void)quote_types_out;
+	if (!str)
+		return (NULL);
+	ft_reset_iterators(d);
+	d->k = ft_count_tokens(str);
+	tokens = malloc(sizeof(char *) * (d->k + 1));
+	if (!tokens)
+		return (NULL);
+	d->qtypes = malloc(sizeof(int) * (d->k + 1));
+	if (!d->qtypes)
+		return (free(tokens), NULL);
+	return (tokens);
 }
 
 char	*ft_strjoin_char(const char *s, char c)
