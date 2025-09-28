@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 void	ft_parent_sigint_handler(int sig)
 {
 	(void)sig;

@@ -1,13 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   define.c                                           :+:      :+:    :+:   */
+/*   util3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daflynn <daflynn@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/13 20:30:54 by daflynn           #+#    #+#             */
-/*   Updated: 2025/09/13 20:31:01 by daflynn          ###   ########.fr       */
+/*   Created: 2025/09/28 11:13:28 by daflynn           #+#    #+#             */
+/*   Updated: 2025/09/28 11:13:35 by daflynn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_skip_quote(char *str, int i)
+{
+	char	quote;
+
+	quote = str[i++];
+	while (str[i] && str[i] != quote)
+		i++;
+	if (str[i])
+		i++;
+	return (i);
+}

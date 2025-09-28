@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-volatile sig_atomic_t	g_last_exit_status = 0;
-
 int	main(int argc, char *argv[], char *env[])
 {
 	char	*line;

@@ -68,7 +68,6 @@ typedef struct s_redirections
 void							ft_free_string_array(char **str_array);
 void							ft_increment_shlvl(t_va **env_list);
 int								ft_create_shlvl(t_va **env_list);
-void							ft_update_shlvl(t_va **env_list);
 t_dat							ft_duplicate_input_args(int argc, char **argv,
 									char **env);
 void							ft_cleanup_data(t_dat *data);
@@ -165,7 +164,6 @@ char							*ft_get_cmd_path(t_dat *d, const char *cmd,
 									int i);
 int								ft_count_pipes(char **tokens);
 void							ft_cmd_not_found(char *cmd);
-void							ft_get_exit_stat(t_dat *d, pid_t pid);
 void							ft_external_functions(t_dat *data, char *line);
 char							**ft_extract_tokens(t_dat *data, int start,
 									int end);
@@ -193,8 +191,6 @@ int								ft_parse_redirection(char **tokens, t_rdr *r);
 int								ft_redir_in(char *file);
 int								ft_redir_out(char *file);
 int								ft_redir_append(char *file);
-int								ft_apply_sing_redirections(t_rdr *r,
-									char **tok);
 int								ft_apply_redirections(t_rdr *r, char **tokens);
 int								ft_remove_redirections(char ***tokens_ptr,
 									int i, int j);
@@ -211,14 +207,10 @@ char							*append_char(char *res, char *token, int *i);
 char							*append_exit_status(char *res, int status,
 									int *i);
 char							*ft_strjoin_free(char *s1, char *s2);
-
-void							ft_set_heredoc_signals(void);
 void							ft_set_child_signals(void);
 void							ft_set_main_signals(void);
-void							ft_heredoc_sigint_handler(int sig);
 void							ft_child_sigint_handler(int sig);
 void							ft_parent_sigint_handler(int sig);
-void							ft_set_no_pipe_child_signals(t_dat *d);
 void							ft_set_main_nested_signals(void);
 void							ft_nested_sigint_handler(int sig);
 int								ft_is_builtin(char *cmd);
@@ -226,25 +218,11 @@ void							ft_execute_builtin_in_child(t_dat *d,
 									char **cmd);
 void							*ft_free_error_expanded(char **expanded, int i);
 char							*ft_get_cmd_path_nested(const char *cmd);
-void							ft_heredoc_sigint_handler(int sig);
 int								ft_strncmp(const char *s1, const char *s2,
 									size_t n);
-int								ft_heredoc_parent(int *pipefd, pid_t pid,
-									int saved_stdin);
-void							ft_heredoc_child(char *delim, char *line,
-									int *pipefd);
-int								ft_handle_heredoc(char *delim, char *line);
-void							ft_ex_single_cmd(t_dat *d, char *cmd_path);
-int								ft_ex_single_cmd_setup(t_dat *d, t_rdr *r,
-									int *saved_stdin);
-void							ft_ex_single_cmd_parent(t_dat *d, pid_t pid,
-									int saved_stdin);
-void							ft_ex_single_cmd_child(t_dat *d, char *cmd_path,
-									int saved_stdin);
 void							ft_nullify_pointers(t_dat *data);
 void							ft_free_lines(t_dat *data);
-void							ft_check_var_assign_and_expand_line_ext(
-									t_dat *data,
+void							ft_check_var_assign_helper(t_dat *data,
 									char *line);
 void							ft_cmd_error(t_dat *data, char *line);
 int								ft_is_interactive(void);
@@ -255,8 +233,6 @@ void							ft_nested_child(t_dat *d, char **cmd,
 									char *cmd_path, int s_stdin);
 void							ft_nested_parent(t_dat *d, pid_t pid,
 									int saved_stdin);
-void							heredoc_sigint_handler(int sig);
-void							setup_heredoc_signals(void);
 void							read_heredoc_content(int fd,
 									const char *delimiter);
 int								handle_heredoc(const char *delimiter);
@@ -265,4 +241,11 @@ void							heredoc_child(int pipe_fd[2],
 									const char *delimiter);
 int								ft_is_pipe_builtin(char *cmd);
 int								ft_count_redirections(char **tokens);
+int								handle_infile(char **tokens, int *i,
+									int *last_in_fd);
+int								handle_outfile_trunc(char **tokens, int *i,
+									int *last_out_fd);
+int								handle_outfile_append(char **tokens, int *i,
+									int *last_out_fd);
+int								handle_heredoc_redirect(char *heredoc_delim);
 #endif
