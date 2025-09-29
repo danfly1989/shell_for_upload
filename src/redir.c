@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 int	ft_redir_in(char *file)
 {
 	int	fd;

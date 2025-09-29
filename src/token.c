@@ -69,53 +69,6 @@ int	ft_skip_token(char *str, int i)
 	return (i);
 }
 
-char	**ft_tokenize_line(t_dat *d, char *str, int **quote_types_out)
-{
-	char	**tokens;
-
-	tokens = ft_sub_tokenize_line(d, str, quote_types_out);
-	if (!tokens || !d->qtypes)
-		return (ft_free_token_quote(tokens, d->qtypes));
-	while (str[d->i])
-	{
-		while (str[d->i] == ' ')
-			d->i++;
-		if (!str[d->i])
-			break ;
-		if (is_special_char(str[d->i]) && (d->i == 0 || str[d->i - 1] != '\\'))
-		{
-			tokens[d->j] = ft_extract_special_token(str, d);
-			d->qtypes[d->j] = 0;
-			d->j++;
-			continue ;
-		}
-		tokens[d->j] = ft_extract_token(str, d, &d->qtypes[d->j]);
-		d->j++;
-	}
-	tokens[d->j] = NULL;
-	d->qtypes[d->j] = -1;
-	*quote_types_out = d->qtypes;
-	return (tokens);
-}
-
-char	**ft_sub_tokenize_line(t_dat *d, char *str, int **quote_types_out)
-{
-	char	**tokens;
-
-	(void)quote_types_out;
-	if (!str)
-		return (NULL);
-	ft_reset_iterators(d);
-	d->k = ft_count_tokens(str);
-	tokens = malloc(sizeof(char *) * (d->k + 1));
-	if (!tokens)
-		return (NULL);
-	d->qtypes = malloc(sizeof(int) * (d->k + 1));
-	if (!d->qtypes)
-		return (free(tokens), NULL);
-	return (tokens);
-}
-
 char	*ft_strjoin_char(const char *s, char c)
 {
 	char	*new;

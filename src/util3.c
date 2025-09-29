@@ -29,10 +29,9 @@ int	is_special_char(char c)
 	return (c == '<' || c == '>' || c == '|' || c == ';' || c == '&');
 }
 
-
 char	*ft_get_var_value(t_va *list, const char *name)
 {
-	size_t n;
+	size_t	n;
 
 	n = ft_strlen(name);
 	while (list)
